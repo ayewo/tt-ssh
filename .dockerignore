@@ -1,0 +1,62 @@
+# Git repositories
+**/.git
+**/.gitignore
+**/.gitattributes
+
+# Python cache
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/.Python
+**/.pytest_cache
+**/pytest_cache
+
+# Build artifacts
+**/build
+**/dist
+**/*.egg-info
+**/wheels
+
+# IDE
+**/.vscode
+**/.idea
+**/.DS_Store
+
+# Logs
+**/*.log
+**/logs
+
+# Temporary files
+**/tmp
+**/temp
+**/*.tmp
+**/*.temp
+**/*.swp
+**/*.swo
+*~
+
+# Node modules (if any)
+**/node_modules
+
+# Documentation that's not needed in runtime
+**/docs/_build
+**/*.md
+**/README*
+**/LICENSE*
+**/CHANGELOG*
+
+# Test files (if not needed)
+**/tests
+**/test
+**/*_test.py
+**/*_test.cpp
+
+# Example files (if not needed)
+**/examples
+**/samples
+
+# Keep this file out of the build context itself
+.dockerignore
+build-and-push.sh
+build-context
