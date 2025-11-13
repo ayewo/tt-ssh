@@ -28,3 +28,36 @@ ssh -p 2222 root@01.proxy.koyeb.app
 ```
 
 _The command above is an example, make sure to replace the hostname and port with the actual values provided in your Koyeb control panel._
+
+
+### Building the Docker Image
+The Docker image in this repo was built inside a pre-existing Koyeb instance where `/root/tt/tt-metal` already contained compiled binaries.
+
+The `tt-metal` folder was set up on Koyeb as follows:
+```sh
+cd /root/tt
+git clone https://github.com/tenstorrent/tt-metal.git --recurse-submodules
+cd tt-metal/
+./build_metal.sh
+
+./create_venv.sh
+-> Creating virtual env in: /root/tt/tt-metal/python_env
+...
+-> Generating git hooks
+-> pre-commit installed at .git/hooks/pre-commit
+-> pre-commit installed at .git/hooks/commit-msg
+-> If you want stubs, run ./scripts/build_scripts/create_stubs.sh
+
+source python_env/bin/activate
+```
+
+To use the code in this repo to build the Docker image (15+ GB), do the following:
+```sh
+export GITHUB_TOKEN="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxx"
+export GHCR_USERNAME="ayewo"
+export IMAGE_NAME="tt-ssh"
+export IMAGE_TAG="latest"
+export DOCKER_BUILDKIT=1
+
+./build-and-push.sh
+```
