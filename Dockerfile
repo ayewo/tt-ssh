@@ -47,7 +47,7 @@ RUN chmod +x /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/docker-entrypoi
 # Copy tt-metal directory from build context. Large directory (8GB+), so we copy it in one layer
 # COPY tt-metal /root/tt/tt-metal
 # Copy it compressed instead (3.1G)
-COPY /tmp/tt-metal.tar.gz /tmp/
+COPY tar/tt-metal.tar.gz /tmp/
 RUN tar -xzf /tmp/tt-metal.tar.gz -C /root/tt/ && rm /tmp/tt-metal.tar.gz
 
 VOLUME /var/lib/docker
