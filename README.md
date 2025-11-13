@@ -11,12 +11,13 @@ To use this example, you need:
 - [A Koyeb account](https://app.koyeb.com/auth/signup).
 - Access to the private preview for Tenstorrent instances. You can request access [here](https://www.koyeb.com/tenstorrent).
 - A public SSH key used to authenticate access to the Koyeb service.
+- The "Deploy to Koyeb" button below replaces [`koyeb/tt-ssh`](https://hub.docker.com/r/koyeb/tt-ssh) with [`ghcr.io/ayewo/tt-ssh`](https://github.com/ayewo/tt-ssh/pkgs/container/tt-ssh) Docker image.
 
 ### Deploy to Koyeb
 
 Get started by creating the service on Koyeb by clicking the button below:
 
-[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?name=tt-ssh&type=docker&image=koyeb%2Ftt-ssh&privileged=true&instance_type=gpu-tenstorrent-n300s&regions=na&env%5BPUBLIC_KEY%5D=REPLACE_ME&volume_path%5Btt-data%5D=%2Fworkdir&volume_size%5Btt-data%5D=10&ports=22%3Btcp%3B%3Btrue%3Btcp&instances_min=1)
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?name=tt-ssh&type=docker&image=ghcr.io%2Fkoyeb%2Ftt-ssh&privileged=true&instance_type=gpu-tenstorrent-n300s&regions=na&env%5BPUBLIC_KEY%5D=REPLACE_ME&volume_path%5Btt-data%5D=%2Fworkdir&volume_size%5Btt-data%5D=10&ports=22%3Btcp%3B%3Btrue%3Btcp&instances_min=1)
 
 Clicking on this button brings you to the Koyeb Service creation page with the settings pre-configured to launch this application. Make sure to modify the `PUBLIC_KEY` environment variable with your own value during the configuration process.
 
