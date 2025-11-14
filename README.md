@@ -65,31 +65,93 @@ export DOCKER_BUILDKIT=1
 
 ## How to Use
 On a new Koyeb instance:
+
+1. The `ssha()` shell function appends several handy commands/aliases to `~/.bash_aliases` on the VM:
 ```sh
-# 1. The `ssha()` shell function appends several handy commands/aliases to `~/.bash_aliases` on the VM
 ssha -v -p 23768 -i ~/.ssh/ayewo/github/id_ed25519 root@01.proxy.koyeb.app
-Ctrl+D
+exit
+```
 
-
-# 2. Ubuntu update and dependencies
+2. Ubuntu update and install some basic utilities:
+```
 ssh -v -p 23768 -i ~/.ssh/ayewo/github/id_ed25519 root@01.proxy.koyeb.app
 apt update
 apt-get install tree zip vim htop screen lsof strace -y
+```
 
-
-# 3. clone and install pytorch-tt dependencies
+3. Git clone and install `pytorch-tt` dependencies:
+```
 mkdir -p /root/tt && cd /root/tt
 git clone https://github.com/tenstorrent/pytorch2.0_ttnn
 cd pytorch2.0_ttnn/
 pip install -r requirements-dev.txt
 pip install -e .
-
-
-# 4. refresh the tt-metal folder present on the VM and Python v-env
-cd /root/tt/tt-metal/ && ./build_metal.sh && ./create_venv.sh
-
-# 5. run the PyTorch tests
-...
-
 ```
+
+4. Refresh the `tt-metal` folder and Python virtual-env present on the VM:
+```
+cd /root/tt/tt-metal/ && ./build_metal.sh && ./create_venv.sh
+```
+
 Running the `create_venv.sh` is a [crucial](https://github.com/tenstorrent/tt-metal/issues/30732#issuecomment-3416288067) last step otherwise you'll get "`sfpi not found at /root/.ttnn_runtime_artifacts/runtime/sfpi or /opt/tenstorrent/sfpi`".
+
+
+5. Run the PyTorch examples to confirm you have a fully working environment:
+```
+cd /tmp && git clone https://github.com/ayewo/tt-ssh/
+cd /tmp/tt-ssh/examples/
+source /root/tt/tt-metal/python_env/bin/activate
+
+python 01.py
+python 02.py
+...
+```
+
+Note that the [examples](https://github.com/ayewo/tt-ssh/tree/main/examples) are taken directly from the Tenstorrent docs: https://docs.tenstorrent.com/tt-metal/latest/ttnn/ttnn/usage.html#basic-examples
+
+```sh
+(python_env) root@00635c27:/tmp/tt-ssh/examples# python 01.py 
+2025-11-14 09:02:38.783 | DEBUG    | ttnn:<module>:77 - Initial ttnn.CONFIG:
+Config{cache_path=/root/.cache/ttnn,model_cache_path=/root/.cache/ttnn/models,tmp_dir=/tmp/ttnn,enable_model_cache=false,enable_fast_runtime_mode=true,throw_exception_on_fallback=false,enable_logging=false,enable_graph_report=false,enable_detailed_buffer_report=false,enable_detailed_tensor_report=false,enable_comparison_mode=false,comparison_mode_should_raise_exception=false,comparison_mode_pcc=0.9999,root_report_path=generated/ttnn/reports,report_name=std::nullopt,std::nullopt}
+2025-11-14 09:02:38.894 | info     |             UMD | Established cluster ETH FW version: 6.14.0 (topology_discovery_wormhole.cpp:324)
+2025-11-14 09:02:38.903 | info     |          Device | Opening user mode device driver (tt_cluster.cpp:209)
+2025-11-14 09:02:38.910 | info     |             UMD | Established cluster ETH FW version: 6.14.0 (topology_discovery_wormhole.cpp:324)
+2025-11-14 09:02:38.936 | info     |             UMD | Established cluster ETH FW version: 6.14.0 (topology_discovery_wormhole.cpp:324)
+2025-11-14 09:02:38.954 | info     |             UMD | Harvesting mask for chip 0 is 0x201 (NOC0: 0x201, simulated harvesting mask: 0x0). (cluster.cpp:413)
+2025-11-14 09:02:38.983 | info     |             UMD | Harvesting mask for chip 1 is 0x204 (NOC0: 0x204, simulated harvesting mask: 0x0). (cluster.cpp:413)
+2025-11-14 09:02:38.996 | info     |             UMD | Opening local chip ids/PCIe ids: {0}/[0] and remote chip ids {1} (cluster.cpp:257)
+2025-11-14 09:02:38.996 | info     |             UMD | All devices in cluster running firmware version: 255.255.0 (cluster.cpp:235)
+2025-11-14 09:02:38.996 | info     |             UMD | IOMMU: disabled (cluster.cpp:177)
+2025-11-14 09:02:38.996 | info     |             UMD | KMD version: 1.32.0 (cluster.cpp:180)
+2025-11-14 09:02:38.999 | info     |             UMD | Pinning pages for Hugepage: virtual address 0x7fd600000000 and size 0x40000000 pinned to physical address 0x200000000 (pci_device.cpp:536)
+2025-11-14 09:02:38.999 | info     |             UMD | Pinning pages for Hugepage: virtual address 0x7fd5c0000000 and size 0x40000000 pinned to physical address 0x1c0000000 (pci_device.cpp:536)
+2025-11-14 09:02:39.028 | info     |          Fabric | TopologyMapper mapping start (mesh=0): n_log=2, n_phys=2, log_deg_hist={1:2}, phys_deg_hist={1:2} (topology_mapper.cpp:574)
+2025-11-14 09:02:39.028 | info     |          Fabric | Fast-path path-graph mapping succeeded for mesh 0 (topology_mapper.cpp:777)
+2025-11-14 09:02:39.673 | info     |          Device | Closing user mode device drivers (tt_cluster.cpp:428)
+```
+
+```sh
+(python_env) root@00635c27:/tmp/tt-ssh/examples# python 02.py 
+2025-11-14 09:02:48.263 | DEBUG    | ttnn:<module>:77 - Initial ttnn.CONFIG:
+Config{cache_path=/root/.cache/ttnn,model_cache_path=/root/.cache/ttnn/models,tmp_dir=/tmp/ttnn,enable_model_cache=false,enable_fast_runtime_mode=true,throw_exception_on_fallback=false,enable_logging=false,enable_graph_report=false,enable_detailed_buffer_report=false,enable_detailed_tensor_report=false,enable_comparison_mode=false,comparison_mode_should_raise_exception=false,comparison_mode_pcc=0.9999,root_report_path=generated/ttnn/reports,report_name=std::nullopt,std::nullopt}
+2025-11-14 09:02:48.367 | info     |             UMD | Established cluster ETH FW version: 6.14.0 (topology_discovery_wormhole.cpp:324)
+2025-11-14 09:02:48.376 | info     |          Device | Opening user mode device driver (tt_cluster.cpp:209)
+2025-11-14 09:02:48.381 | info     |             UMD | Established cluster ETH FW version: 6.14.0 (topology_discovery_wormhole.cpp:324)
+2025-11-14 09:02:48.407 | info     |             UMD | Established cluster ETH FW version: 6.14.0 (topology_discovery_wormhole.cpp:324)
+2025-11-14 09:02:48.424 | info     |             UMD | Harvesting mask for chip 0 is 0x201 (NOC0: 0x201, simulated harvesting mask: 0x0). (cluster.cpp:413)
+2025-11-14 09:02:48.452 | info     |             UMD | Harvesting mask for chip 1 is 0x204 (NOC0: 0x204, simulated harvesting mask: 0x0). (cluster.cpp:413)
+2025-11-14 09:02:48.466 | info     |             UMD | Opening local chip ids/PCIe ids: {0}/[0] and remote chip ids {1} (cluster.cpp:257)
+2025-11-14 09:02:48.466 | info     |             UMD | All devices in cluster running firmware version: 255.255.0 (cluster.cpp:235)
+2025-11-14 09:02:48.466 | info     |             UMD | IOMMU: disabled (cluster.cpp:177)
+2025-11-14 09:02:48.466 | info     |             UMD | KMD version: 1.32.0 (cluster.cpp:180)
+2025-11-14 09:02:48.469 | info     |             UMD | Pinning pages for Hugepage: virtual address 0x7f1fc0000000 and size 0x40000000 pinned to physical address 0x200000000 (pci_device.cpp:536)
+2025-11-14 09:02:48.469 | info     |             UMD | Pinning pages for Hugepage: virtual address 0x7f1f80000000 and size 0x40000000 pinned to physical address 0x1c0000000 (pci_device.cpp:536)
+2025-11-14 09:02:48.506 | info     |          Fabric | TopologyMapper mapping start (mesh=0): n_log=2, n_phys=2, log_deg_hist={1:2}, phys_deg_hist={1:2} (topology_mapper.cpp:574)
+2025-11-14 09:02:48.506 | info     |          Fabric | Fast-path path-graph mapping succeeded for mesh 0 (topology_mapper.cpp:777)
+2025-11-14 09:02:48.661 | info     |           Metal | Profiler started on device 0 (device_pool.cpp:203)
+tensor([[2.1094],
+        [0.8203],
+        [1.2266],
+        [2.2500]], dtype=torch.bfloat16)
+2025-11-14 09:02:49.393 | info     |          Device | Closing user mode device drivers (tt_cluster.cpp:428)
+```
