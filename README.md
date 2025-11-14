@@ -61,3 +61,35 @@ export DOCKER_BUILDKIT=1
 
 ./build-and-push.sh
 ```
+
+
+## How to Use
+On a new Koyeb instance:
+```sh
+# 1. The `ssha()` shell function appends several handy commands/aliases to `~/.bash_aliases` on the VM
+ssha -v -p 23768 -i ~/.ssh/ayewo/github/id_ed25519 root@01.proxy.koyeb.app
+Ctrl+D
+
+
+# 2. Ubuntu update and dependencies
+ssh -v -p 23768 -i ~/.ssh/ayewo/github/id_ed25519 root@01.proxy.koyeb.app
+apt update
+apt-get install tree zip vim htop screen lsof strace -y
+
+
+# 3. clone and install pytorch-tt dependencies
+mkdir -p /root/tt && cd /root/tt
+git clone https://github.com/tenstorrent/pytorch2.0_ttnn
+cd pytorch2.0_ttnn/
+pip install -r requirements-dev.txt
+pip install -e .
+
+
+# 4. refresh the tt-metal folder present on the VM and Python v-env
+cd /root/tt/tt-metal/ && ./build_metal.sh && ./create_venv.sh
+
+# 5. run the PyTorch tests
+...
+
+```
+Running the `create_venv.sh` is a [crucial](https://github.com/tenstorrent/tt-metal/issues/30732#issuecomment-3416288067) last step otherwise you'll get "`sfpi not found at /root/.ttnn_runtime_artifacts/runtime/sfpi or /opt/tenstorrent/sfpi`".
