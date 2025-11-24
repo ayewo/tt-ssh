@@ -66,7 +66,7 @@ export DOCKER_BUILDKIT=1
 ## How to Use
 On a new Koyeb instance:
 
-1. The `ssha()` shell function appends several handy commands/aliases to `~/.bash_aliases` on the VM:
+1. Note that `ssha()` is a custom `zsh` function. It appends several local commands/aliases from my shell to the VM's `~/.bash_aliases` that I find handy:
 ```sh
 ssha -v -p 23768 -i ~/.ssh/ayewo/github/id_ed25519 root@01.proxy.koyeb.app
 exit
@@ -79,16 +79,7 @@ apt update
 apt-get install tree zip vim htop screen lsof strace -y
 ```
 
-3. Git clone and install `pytorch-tt` dependencies:
-```
-mkdir -p /root/tt && cd /root/tt
-git clone https://github.com/tenstorrent/pytorch2.0_ttnn
-cd pytorch2.0_ttnn/
-pip install -r requirements-dev.txt
-pip install -e .
-```
-
-4. Refresh the `tt-metal` folder and Python virtual-env present on the VM:
+3. Refresh the `tt-metal/` folder and the Python virtual-env on the VM (the `tt-metal/` folder was [built into](https://github.com/ayewo/tt-ssh/blob/27dd1e4c397c6a7943cad65c8f1886735b313382/Dockerfile#L50-L52) the Docker image):
 ```
 cd /root/tt/tt-metal/ && ./build_metal.sh && ./create_venv.sh
 ```
@@ -96,7 +87,16 @@ cd /root/tt/tt-metal/ && ./build_metal.sh && ./create_venv.sh
 Running the `create_venv.sh` is a [crucial](https://github.com/tenstorrent/tt-metal/issues/30732#issuecomment-3416288067) last step otherwise you'll get "`sfpi not found at /root/.ttnn_runtime_artifacts/runtime/sfpi or /opt/tenstorrent/sfpi`".
 
 
-5. Run the PyTorch examples to confirm you have a fully working environment:
+4. Now activate the Python virtual-env refreshed in step 3:
+```
+source /root/tt/tt-metal/python_env/bin/activate
+```
+
+5. Confirm you have a working environment by running the PyTorch examples below.
+
+> [!NOTE]
+> The [examples](https://github.com/ayewo/tt-ssh/tree/main/examples) are taken directly from the Tenstorrent docs: https://docs.tenstorrent.com/tt-metal/latest/ttnn/ttnn/usage.html#basic-examples
+
 ```
 cd /tmp && git clone https://github.com/ayewo/tt-ssh/
 cd /tmp/tt-ssh/examples/
@@ -106,8 +106,6 @@ python 01.py
 python 02.py
 ...
 ```
-
-Note that the [examples](https://github.com/ayewo/tt-ssh/tree/main/examples) are taken directly from the Tenstorrent docs: https://docs.tenstorrent.com/tt-metal/latest/ttnn/ttnn/usage.html#basic-examples
 
 ```sh
 (python_env) root@00635c27:/tmp/tt-ssh/examples# python 01.py 
@@ -154,4 +152,13 @@ tensor([[2.1094],
         [1.2266],
         [2.2500]], dtype=torch.bfloat16)
 2025-11-14 09:02:49.393 | info     |          Device | Closing user mode device drivers (tt_cluster.cpp:428)
+```
+
+6. Now that you have a working environment, you can work on your fork. In my case, this is my fork of the `pytorch2.0_ttnn` repo. Git clone and install its dependencies:
+```
+mkdir -p /root/tt && cd /root/tt
+git clone https://github.com/ayewo/pytorch2.0_ttnn
+cd pytorch2.0_ttnn/
+pip install -r requirements-dev.txt
+pip install -e .
 ```
