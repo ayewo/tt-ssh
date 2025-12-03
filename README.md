@@ -96,7 +96,14 @@ Running the `create_venv.sh` is a [crucial](https://github.com/tenstorrent/tt-me
 source /root/tt/tt-metal/python_env/bin/activate
 ```
 
-5. Confirm you have a working environment by running the PyTorch examples below.
+5. Test you have a working environment with this:
+```
+cd /root/tt/tt-metal/
+export PYTHONPATH=/root/tt/tt-metal
+python3 -m ttnn.examples.usage.run_op_on_device
+```
+
+  You can further confirm you have a working environment by running each of the PyTorch examples below.
 
 > [!NOTE]
 > The [examples](https://github.com/ayewo/tt-ssh/tree/main/examples) are taken directly from the Tenstorrent docs: https://docs.tenstorrent.com/tt-metal/latest/ttnn/ttnn/usage.html#basic-examples
