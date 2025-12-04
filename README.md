@@ -83,7 +83,7 @@ apt-get install wget git python3-pip dkms cargo -y
 
 ```
 
-3. Refresh the `tt-metal/` folder and the Python virtual-env on the VM (the `tt-metal/` folder was [built into](https://github.com/ayewo/tt-ssh/blob/27dd1e4c397c6a7943cad65c8f1886735b313382/Dockerfile#L50-L52) the Docker image):
+3. Refresh[^1] the `tt-metal/` folder and the Python virtual-env on the VM (the `tt-metal/` folder was [built into](https://github.com/ayewo/tt-ssh/blob/27dd1e4c397c6a7943cad65c8f1886735b313382/Dockerfile#L50-L52) the Docker image):
 ```
 cd /root/tt/tt-metal/ && ./build_metal.sh && ./create_venv.sh
 ```
@@ -173,3 +173,6 @@ cd pytorch2.0_ttnn/
 pip install -r requirements-dev.txt
 pip install -e .
 ```
+
+
+[^1]: On an N300s(4 vCPU, 32GB RAM, 24GB VRAM, 320GB Disk) Koyeb instance, compilation of a fresh git clone of `tt-metal/` via `./build_metal.sh` takes ~22mins while a refresh of an already cloned folder (built into the Docker image) using the same shell script takes ~10s. Similarly, venv creation inside `tt-metal/` via `./create_venv.sh` takes ~4mins while a refresh is almost instantenous.
