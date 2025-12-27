@@ -170,6 +170,7 @@ tensor([[2.1094],
 mkdir -p /root/tt && cd /root/tt
 git clone https://github.com/ayewo/pytorch2.0_ttnn
 cd pytorch2.0_ttnn/
+git switch feat/mistral
 pip install -r requirements-dev.txt
 pip install -e .
 ```
