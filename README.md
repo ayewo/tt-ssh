@@ -104,7 +104,7 @@ export PYTHONPATH=/root/tt/tt-metal
 python3 -m ttnn.examples.usage.run_op_on_device
 ```
 
-  You can further confirm you have a working environment by running each of the PyTorch examples below.
+  You can further confirm you have a working environment by running each of the PyTorch examples below[^2].
 
 > [!NOTE]
 > The [examples](https://github.com/ayewo/tt-ssh/tree/main/examples) are taken directly from the Tenstorrent docs: https://docs.tenstorrent.com/tt-metal/latest/ttnn/ttnn/usage.html#basic-examples
@@ -178,3 +178,12 @@ pip install -e .
 
 
 [^1]: On an N300s(4 vCPU, 32GB RAM, 24GB VRAM, 320GB Disk) Koyeb instance, compilation of a fresh git clone of `tt-metal/` via `./build_metal.sh` takes ~22mins while a refresh of an already cloned folder (built into the Docker image) using the same shell script takes ~10s. Similarly, venv creation inside `tt-metal/` via `./create_venv.sh` takes ~4mins while a refresh is almost instantenous.
+
+[^2]: To avoid getting the warning `File size 48 is not as expected 56 for mutex REG_TLB_0_PCIe` or similar errors (view source for an example below), be sure to run `export PYTHONPATH=/root/tt/tt-metal` prior to running `python3 -m ttnn.examples.usage.run_op_on_device`.
+```
+python3 -m ttnn.examples.usage.run_op_on_device
+2026-02-18 14:52:59.440 | DEBUG    | ttnn:<module>:77 - Initial ttnn.CONFIG:
+Config{cache_path=/root/.cache/ttnn,model_cache_path=/root/.cache/ttnn/models,tmp_dir=/tmp/ttnn,enable_model_cache=false,enable_fast_runtime_mode=true,throw_exception_on_fallback=false,enable_logging=false,enable_graph_report=false,enable_detailed_buffer_report=false,enable_detailed_tensor_report=false,enable_comparison_mode=false,comparison_mode_should_raise_exception=false,comparison_mode_pcc=0.9999,root_report_path=generated/ttnn/reports,report_name=std::nullopt,std::nullopt}
+2026-02-18 14:53:01.472 | warning  |             UMD | File size 48 is not as expected 56 for mutex REG_TLB_0_PCIe. This could be due to new pthread library version, or some other external factor. (robust_mutex.cpp:199)
+2026-02-18 14:53:01.472 | warning  |             UMD | The file was resized, but the initialized flag is correct. This is an unexpected case, the mutex might fail. Mutex name: REG_TLB_0_PCIe (robust_mutex.cpp:144)
+```
