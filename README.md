@@ -78,7 +78,7 @@ ssh -v -p 23768 -i ~/.ssh/ayewo/github/id_ed25519 root@01.proxy.koyeb.app
 apt update
 
 # dependencies / utils that I find handy on the VM
-apt install ca-certificates gpg tree zip vim htop screen lsof strace ripgrep -y
+apt install ca-certificates gpg tree less zip vim htop screen lsof strace ripgrep -y
 
 # tenstorrent utils / dependencies
 apt install wget git python3-pip dkms cargo -y 
