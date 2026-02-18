@@ -76,11 +76,12 @@ exit
 ```
 ssh -v -p 23768 -i ~/.ssh/ayewo/github/id_ed25519 root@01.proxy.koyeb.app
 apt update
-# dependencies / utils that I find handy on the VM
-apt-get install tree zip vim htop screen lsof strace ripgrep -y
-# tenstorrent utils / dependencies
-apt-get install wget git python3-pip dkms cargo -y 
 
+# dependencies / utils that I find handy on the VM
+apt install ca-certificates gpg tree zip vim htop screen lsof strace ripgrep -y
+
+# tenstorrent utils / dependencies
+apt install wget git python3-pip dkms cargo -y 
 ```
 
 3. Refresh[^1] the `tt-metal/` folder and the Python virtual-env on the VM (the `tt-metal/` folder was [built into](https://github.com/ayewo/tt-ssh/blob/27dd1e4c397c6a7943cad65c8f1886735b313382/Dockerfile#L50-L52) the Docker image):
