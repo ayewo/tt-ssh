@@ -188,7 +188,7 @@ Config{cache_path=/root/.cache/ttnn,model_cache_path=/root/.cache/ttnn/models,tm
 2026-02-18 14:53:01.472 | warning  |             UMD | The file was resized, but the initialized flag is correct. This is an unexpected case, the mutex might fail. Mutex name: REG_TLB_0_PCIe (robust_mutex.cpp:144)
 ```
 
-[^3]: Also an error like `TT_FATAL: Read unexpected run_mailbox value from core (x=25,y=17) (assert.hpp:104)` is also due to forgetting to run `export PYTHONPATH=/root/tt/tt-metal` prior to running `python3 -m ttnn.examples.usage.run_op_on_device`.
+[^3]: Also an error like `TT_FATAL: Read unexpected run_mailbox value from core (x=25,y=17) (assert.hpp:104)` or `2026-04-02 09:39:53.241 | critical |          Always | TT_FATAL: Read unexpected run_mailbox value from core (x=25,y=16) (assert.hpp:104)` is also due to forgetting to run `export PYTHONPATH=/root/tt/tt-metal` prior to running `python3 -m ttnn.examples.usage.run_op_on_device`.
 ```
 python3 -m ttnn.examples.usage.run_op_on_device
 2026-04-02 09:39:51.174 | DEBUG    | ttnn:<module>:77 - Initial ttnn.CONFIG:
